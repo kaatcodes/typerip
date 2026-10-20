@@ -148,6 +148,29 @@ header #url_input {
     padding:1rem;
 }
 
+.download_options {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem 2.5rem;
+}
+
+.download_options select {
+    font: inherit;
+    color: #575757;
+    background: #fff;
+    border: 1px solid #bbb;
+    border-radius: .5rem;
+    padding: .4rem .8rem;
+    margin-left: .5rem;
+    cursor: pointer;
+}
+
+.download_options select:focus {
+    outline: none;
+    border-color: #005DFF;
+}
+
 .button_container .button{
     background: #fff;
     border-radius: .5rem;

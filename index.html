@@ -1,4 +1,4 @@
-<!doctype <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -14,7 +14,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.6.0/jszip.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.min.js"></script>
     <script src="js/opentype.js"></script>
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/axios@1.7.9/dist/axios.min.js"></script>
     <script src="js/typerip.js"></script>
     <link rel="icon" type="image/png" href="res/favicon.png">
 </head>
@@ -44,11 +44,23 @@
                                         <span v-for="(designer, key) in fontFamily.designers"><a v-bind:href="designer.url">{{designer.name}}</a><span v-if="key < fontFamily.designers.length -1">, </span></span>
                                     </p>
                                     <br/>
-                                    <input type="checkbox" id="rawdlCheckbox" value="false" v-model="rawDownload" style="display:span;">
-                                    <label for="rawdlCheckbox">Download without processing</label>
+                                    <div class="download_options">
+                                        <span>
+                                            <label for="formatSelect">Format</label>
+                                            <select id="formatSelect" v-model="fontFormat">
+                                                <option value="otf">OTF (desktop apps)</option>
+                                                <option value="woff2">WOFF2 (websites)</option>
+                                                <option value="woff">WOFF (older browsers)</option>
+                                            </select>
+                                        </span>
+                                        <span v-if="fontFormat == 'otf'">
+                                            <input type="checkbox" id="rawdlCheckbox" v-model="rawDownload">
+                                            <label for="rawdlCheckbox">Download without processing</label>
+                                        </span>
+                                    </div>
                                 </div>
                                 <div class="button_container">
-                                    <a class="button" v-on:click="downloadFonts(fontFamily.fonts, fontFamily.name)">Download All</a>
+                                    <a class="button" v-on:click="downloadFonts(fontFamily.fonts, fontFamily.name)">{{ downloadsInProgress > 0 ? "Downloading..." : "Download All" }}</a>
                                 </div>
                             </template>
                         </div>
@@ -65,7 +77,7 @@
                 <div class="row">
                     <div class="column six offset-three">
                         <p>
-                            Created by <a href="http://badnoise.net">Jeremy C.</a> Released under the <a href="http://www.wtfpl.net/">WTFPL</a>. Fork this on <a href="https://github.com/beemilkz/typerip">Github</a>.
+                            Created by <a href="http://badnoise.net">Jeremy C.</a> Fixed by <a href="https://github.com/kaatcodes">kaatcodes</a>. Released under the <a href="http://www.wtfpl.net/">WTFPL</a>. Fork this on <a href="https://github.com/kaatcodes/typerip">Github</a>.
                         </p>
                     </div>
                 </div>

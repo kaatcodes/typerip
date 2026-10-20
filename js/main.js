@@ -23,7 +23,9 @@ var typeRipVue = new Vue({
         fontIsActive: false,
         fontFamily: {},
         rawDownload: false,
-        message: {visible: true, title: "Typerip", text: "<p>The Adobe Font ripper.</p><br><p>Enter a font family URL from <a href='https://fonts.adobe.com/'>Adobe Fonts</a> to begin.</p><p>By using this tool, you agree to not violate copyright law or licenses established by the font owners, font foundries and/or Adobe. All fonts belong to their respective owners.</p><br><p>Fork this project on <a href='https://github.com/CodeZombie/TypeRip'>github</a></p><p>Big thanks to <a href='https://opentype.js.org/'>OpenType.js</a> for their javascript font library."}
+        fontFormat: "otf",
+        downloadsInProgress: 0,
+        message: {visible: true, title: "Typerip", text: "<p>The Adobe Font ripper.</p><br><p>Enter a font family URL from <a href='https://fonts.adobe.com/'>Adobe Fonts</a> to begin.</p><p>By using this tool, you agree to not violate copyright law or licenses established by the font owners, font foundries and/or Adobe. All fonts belong to their respective owners.</p><br><p>Fork this project on <a href='https://github.com/kaatcodes/typerip'>github</a></p><p>Big thanks to <a href='https://opentype.js.org/'>OpenType.js</a> for their javascript font library."}
     },
     methods: {
         showMessage: function(title_, text_) {
@@ -55,10 +57,18 @@ var typeRipVue = new Vue({
             })
         },
         downloadFonts: function(font_, zipFileName_) {
-            TypeRip.downloadFonts(font_, zipFileName_, this.rawDownload);
+            this.downloadsInProgress++
+            TypeRip.downloadFonts(font_, zipFileName_, this.rawDownload, this.fontFormat)
+            .then(result => {
+                if(result.failed.length > 0){
+                    alert("These fonts could not be downloaded:\n\n" + result.failed.join("\n"))
+                }
+            })
+            .catch(error => alert("Download failed: " + error.message))
+            .finally(() => this.downloadsInProgress--)
         },
         getFontsInChunks: function(chunkSize_) {
-            output = []
+            let output = []
             if(this.fontFamily.fonts != null) {
                 for(var i = 0; i < this.fontFamily.fonts.length; i++) {
                     if(i % chunkSize_ == 0 ){
